@@ -1,0 +1,47 @@
+#include "ADC_interface.h"
+#include "../DIO/MemMap.h"
+#include "../../LIB/BIT_MATH.h"
+#include "ADC_interface.h"
+void ADC_void_init(prescaller_no prescaller,vreff_type vreff)
+{
+	//ADC ENABLE
+	SETBIT(ADCSRA,ADEN);
+	//ADC INTERRUPT ENABLE
+	CLRBIT(ADCSRA,ADIE);
+	//ADC
+	CLRBIT(ADMUX,ADLAR);
+	////////////////////
+	switch(prescaller)
+	{
+	case ADC_PRESCALLER_2:    SETBIT(ADCSRA,ADPS0);   CLRBIT(ADCSRA,ADPS1);CLRBIT(ADCSRA,ADPS2);break;
+	case ADC_PRESCALLER_4:    CLRBIT(ADCSRA,ADPS0);  SETBIT(ADCSRA,ADPS1);CLRBIT(ADCSRA,ADPS2);break;
+	case ADC_PRESCALLER_8:    SETBIT(ADCSRA,ADPS0);   SETBIT(ADCSRA,ADPS1);CLRBIT(ADCSRA,ADPS2);break;
+	case ADC_PRESCALLER_16:  CLRBIT(ADCSRA,ADPS0);  CLRBIT(ADCSRA,ADPS1);SETBIT(ADCSRA,ADPS2);break;
+	case ADC_PRESCALLER_32:  SETBIT(ADCSRA,ADPS0);   CLRBIT(ADCSRA,ADPS1);SETBIT(ADCSRA,ADPS2);break;
+	case ADC_PRESCALLER_64:  CLRBIT(ADCSRA,ADPS0);  SETBIT(ADCSRA,ADPS1);SETBIT(ADCSRA,ADPS2);break;
+	case ADC_PRESCALLER_128:SETBIT(ADCSRA,ADPS0);   SETBIT(ADCSRA,ADPS1);SETBIT(ADCSRA,ADPS2);break;
+	}
+	//ADC SELECT VREF
+	switch(vreff)
+	{
+	case ADC_AREFF:      CLRBIT(ADMUX,REFS0);        CLRBIT(ADMUX,REFS1);break;
+	case ADC_AVCC:       CLRBIT(ADMUX,REFS0);         SETBIT(ADMUX,REFS1);break;
+	case ADC_INTERNAL:SETBIT(ADMUX,REFS0);          SETBIT(ADMUX,REFS1);break;
+	}
+}
+u16  ADC_u16_read(u8 channel)
+{
+	ADMUX &=0xE0;
+	channel &=0x07;
+	ADMUX |= channel;
+
+	//ADC start single conversion
+	SETBIT(ADCSRA,ADSC);
+
+	//ADC wait for conversion
+	while(!(ADCSRA & (1<<ADIF)));
+	//ADC CLEAR FLAG
+	SETBIT(ADCSRA,ADIF);
+
+	return ADC;
+}

@@ -1,0 +1,14 @@
+MCAL/TIMER0/TIMER0_prg.o MCAL/TIMER0/TIMER0_prg.o:  \
+ ../MCAL/TIMER0/TIMER0_prg.c ../MCAL/TIMER0/../../LIB/STD_TYPES.h \
+  ../MCAL/TIMER0/../../LIB/BIT_MATH.h ../MCAL/TIMER0/TIMER0_priv.h \
+  ../MCAL/TIMER0/TIMER0_config.h ../MCAL/TIMER0/../DIO/Memmap.h
+
+../MCAL/TIMER0/../../LIB/STD_TYPES.h:
+
+../MCAL/TIMER0/../../LIB/BIT_MATH.h:
+
+../MCAL/TIMER0/TIMER0_priv.h:
+
+../MCAL/TIMER0/TIMER0_config.h:
+
+../MCAL/TIMER0/../DIO/Memmap.h:
